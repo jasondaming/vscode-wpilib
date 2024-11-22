@@ -1,4 +1,5 @@
 //@ts-check
+/* eslint  no-undef: 0 */ 
 
 // This script will be run within the webview itself
 // It cannot access the main VS Code APIs directly.

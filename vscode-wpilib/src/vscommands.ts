@@ -382,8 +382,8 @@ export function createVsCommands(context: vscode.ExtensionContext, externalApi: 
       return;
     }
     const javaConfig = vscode.workspace.getConfiguration('java');
-    await javaConfig.update('home', javaHome, vscode.ConfigurationTarget.Global);
-    await vscode.window.showInformationMessage(i18n('message', 'Successfully set java.home'));
+    await javaConfig.update('jdt.ls.java.home', javaHome, vscode.ConfigurationTarget.Global);
+    await vscode.window.showInformationMessage(i18n('message', 'Successfully set java.jdt.ls.java.home'));
   }));
 
   context.subscriptions.push(vscode.commands.registerCommand('wpilibcore.installGradleTools', async () => {
@@ -500,6 +500,19 @@ export function createVsCommands(context: vscode.ExtensionContext, externalApi: 
           logger.error('Error downloading item', err);
         }
       }
+    }
+  }));
+
+  context.subscriptions.push(vscode.commands.registerCommand('wpilibcore.runGradleClean', async () => {
+    const wp = await externalApi.getPreferencesAPI().getFirstOrSelectedWorkspace();
+    if (wp === undefined) {
+      vscode.window.showInformationMessage(i18n('message', 'Cannot run command on empty workspace'));
+      return;
+    }
+    const prefs = externalApi.getPreferencesAPI().getPreferences(wp);
+    const result = await gradleRun('clean', wp.uri.fsPath, wp, 'Gradle Command', externalApi.getExecuteAPI(), prefs);
+    if (result !== 0) {
+      vscode.window.showInformationMessage(i18n('message', 'Command ({0}) returned code: {1}', 'clean', result));
     }
   }));
 }
