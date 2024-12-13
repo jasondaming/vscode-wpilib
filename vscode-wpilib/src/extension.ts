@@ -36,6 +36,7 @@ import { Help } from './webviews/help';
 import { ProjectCreator } from './webviews/projectcreator';
 import { WPILibUpdates } from './wpilibupdates';
 import { DependencyViewProvider } from './dependencyView';
+import { ExampleViewProvider } from './exampleView';
 
 // External API class to implement the IExternalAPI interface
 class ExternalAPI implements IExternalAPI {
@@ -174,10 +175,33 @@ async function handleAfterTrusted(externalApi: ExternalAPI, context: vscode.Exte
             depProvider?.addDependency();
           }));
 
-/*         context.subscriptions.push(
-          vscode.commands.registerCommand('wpilib.removeDependency', () => {
-            depProvider?.removeDependency();
-          })) */
+        context.subscriptions.push(
+          vscode.commands.registerCommand('wpilib.updateDependencies', () => {
+            depProvider?.updateDependencies();
+          }));
+      }
+
+      context.subscriptions.push(depProvider);
+    }
+  } catch (err) {
+    logger.error('error creating dependency view', err);
+    creationError = true;
+  }
+
+  let exampleProvider: ExampleViewProvider | undefined;
+
+  try {
+    if (projectInfo !== undefined && vendorLibs !== undefined) {
+      depProvider = new DependencyViewProvider(context.extensionUri, projectInfo, vendorLibs, externalApi);
+
+      context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(DependencyViewProvider.viewType, depProvider));
+
+      if (depProvider !== undefined) {
+        context.subscriptions.push(
+          vscode.commands.registerCommand('wpilib.addDependency', () => {
+            depProvider?.addDependency();
+          }));
 
         context.subscriptions.push(
           vscode.commands.registerCommand('wpilib.updateDependencies', () => {

@@ -63,6 +63,11 @@
 					"id": "wpilib-vendordeps",
 					"title": "WPILib Vendor Dependencies",
 					"icon": "media/wpilib.png"
+				},
+                {
+					"id": "wpilib-exampleexplorer",
+					"title": "WPILib Example Explorer",
+					"icon": "media/compass.png"
 				}
 			]
 		},
@@ -416,7 +421,31 @@
                 "title": "%wpilibcore.runGradleClean.title%",
                 "category": "WPILib",
                 "enablement": "isWorkspaceTrusted"
-            }
+            },
+            {
+				"command": "nodeDependencies.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "nodeDependencies.addEntry",
+				"title": "Add"
+			},
+			{
+				"command": "nodeDependencies.editEntry",
+				"title": "Edit",
+				"icon": {
+					"light": "resources/light/edit.svg",
+					"dark": "resources/dark/edit.svg"
+				}
+			},
+			{
+				"command": "nodeDependencies.deleteEntry",
+				"title": "Delete"
+			}
         ],
         "views": {
             "explorer": [
@@ -433,6 +462,16 @@
 					"name": "WPILib Vendor Dependencies",
                     "icon": "media/wpilib.png"
 				}
+			],
+            "wpilib-exampleexplorer": [
+                {
+					"id": "wpilib.vendorexampleView",
+					"name": "Vendor Examples"
+				},
+                {
+					"id": "wpilib.exampleView",
+					"name": "WPILib Examples"
+                }
 			]
         },
         "keybindings": [
